@@ -1,4 +1,4 @@
-package com.cheeky
+package com.cheeky.core
 
 import java.util.Date
 

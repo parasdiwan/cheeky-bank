@@ -1,4 +1,4 @@
-package com.cheeky
+package com.cheeky.core
 
 import java.lang.IllegalArgumentException
 import java.util.UUID
@@ -28,7 +28,7 @@ class TransactionService private constructor() {
             sourceAccountId,
             destinationAccountId,
             userId
-            )
+        )
 
         transactions.save(transactionId, transaction)
 

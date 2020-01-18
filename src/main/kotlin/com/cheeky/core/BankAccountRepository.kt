@@ -1,4 +1,6 @@
-package com.cheeky
+package com.cheeky.core
+
+import com.cheeky.CheekyMemoryRepository
 
 class BankAccountRepository: CheekyMemoryRepository<String, BankAccount>() {
 
@@ -7,7 +9,8 @@ class BankAccountRepository: CheekyMemoryRepository<String, BankAccount>() {
 
         fun getInstance(): BankAccountRepository {
             if (INSTANCE == null) {
-                INSTANCE = BankAccountRepository()
+                INSTANCE =
+                    BankAccountRepository()
             }
             return INSTANCE
         }
