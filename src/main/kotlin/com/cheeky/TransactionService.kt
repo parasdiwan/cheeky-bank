@@ -6,8 +6,8 @@ import java.util.Date
 
 class TransactionService private constructor() {
 
-    val transactions: TransactionRepository = TransactionRepository.getInstance()
-    val accounts: BankAccountRepository = BankAccountRepository.getInstance()
+    private val transactions: TransactionRepository = TransactionRepository.getInstance()
+    private val accounts: BankAccountRepository = BankAccountRepository.getInstance()
 
     fun transferMoney(userId: String, sourceAccountId: String, destinationAccountId: String, amount: Double) {
 
