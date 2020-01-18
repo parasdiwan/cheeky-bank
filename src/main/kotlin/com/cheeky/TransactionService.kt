@@ -27,7 +27,6 @@ class TransactionService private constructor() {
             creationTime,
             sourceAccountId,
             destinationAccountId,
-            "Initiated",
             userId
             )
 
@@ -38,6 +37,9 @@ class TransactionService private constructor() {
 
         accounts.save(sourceAccountId, sourceAccount)
         accounts.save(destinationAccountId, destinationAccount)
+
+        transaction.completed()
+        transactions.save(transactionId, transaction)
     }
 
     private fun validateUserTransaction(sourceAccount: BankAccount, userId: String, amount: Double) {
