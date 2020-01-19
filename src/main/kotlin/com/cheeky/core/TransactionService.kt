@@ -50,7 +50,7 @@ class TransactionService public @Inject constructor(
         if (userId != sourceAccount.userId) {
             throw IllegalArgumentException("User not authorized to perform transfer")
         }
-        if (sourceAccount.isAmountDeductible(amount)) {
+        if (!sourceAccount.isAmountDeductible(amount)) {
             throw IllegalArgumentException("Not enough balance in the source account")
         }
     }
