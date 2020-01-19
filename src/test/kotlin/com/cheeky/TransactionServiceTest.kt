@@ -1,14 +1,11 @@
 package com.cheeky
 
-import com.cheeky.core.BankAccount
-import com.cheeky.core.BankAccountRepository
-import com.cheeky.core.TransactionRepository
-import com.cheeky.core.TransactionService
+import com.cheeky.core.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.mockito.ArgumentCaptor
+import org.mockito.Mockito.*
 import java.lang.IllegalArgumentException
 import java.util.*
 
@@ -24,6 +21,9 @@ internal class TransactionServiceTest {
     private var transactions: TransactionRepository = mock(TransactionRepository::class.java)
     private var accounts: BankAccountRepository = mock(BankAccountRepository::class.java)
 
+    private val transactionCaptor = ArgumentCaptor.forClass<Transaction, Transaction>(Transaction::class.java)
+    private val bankAccountCaptor = ArgumentCaptor.forClass<BankAccount, BankAccount>(BankAccount::class.java)
+
     private val sut = TransactionService(transactions, accounts)
 
     @BeforeEach
@@ -37,6 +37,22 @@ internal class TransactionServiceTest {
         assertThrows<IllegalArgumentException> {
             sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
         }
+    }
+
+    @Test
+    internal fun transferMoney_whenEnoughBalance_shouldCompleteTransfer() {
+        val amount = 21.00
+        sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
+
+        verify(transactions, times(2)).save(any(), transactionCaptor.capture())
+        verify(accounts, times(2)).save(any(), bankAccountCaptor.capture())
+
+        assert(transactionCaptor.value.amount.equals(amount))
+        assert(transactionCaptor.value.amount.equals(amount))
+        val sourceBalance = bankAccountCaptor.value.getBalance()
+        assert(sourceBalance.equals(sourceBalance - amount))
+        val destBalance = bankAccountCaptor.value.getBalance()
+        assert(destBalance.equals(destBalance + amount))
     }
 
     private fun newBankAccountId(accountId: String): BankAccount {

@@ -21,4 +21,8 @@ class BankAccount (
     fun addAmount(amount: Double) {
         balance = balance + amount
     }
+
+    internal fun getBalance(): Double {
+        return balance
+    }
 }
