@@ -1,15 +1,30 @@
 package com.cheeky.core
 
+import com.cheeky.di.CheekyUnit
 import com.cheeky.di.Inject
+import com.google.gson.Gson
 import io.javalin.Javalin
 
-class Proxy @Inject public constructor (router: Javalin) {
+@CheekyUnit
+class Proxy @Inject public constructor (
+    router: Javalin,
+    transactionService: TransactionService
+) {
 
     init {
         router.get("/ping")
         { handler -> handler.result("pong") }
 
-//        router.post("/transfers")
-//        { handler -> handler.req.}
+        router.post("/transfers")
+        { handler ->
+            val body = handler.body()
+            val request = Gson().fromJson(body, TransferRequestVM::class.java)
+            transactionService.transferMoney(
+                request.userId,
+                request.sourceAccountId,
+                request.destAccountId,
+                request.amount
+            )
+        }
     }
 }
