@@ -60,6 +60,20 @@ internal class TransactionServiceTest {
         assertEquals(BALANCE + amount, destAccount.captured.getBalance())
     }
 
+    @Test
+    fun transferMoney_whenAccountsDontExist_shouldThrowException() {
+        every { accounts.findById(SOURCE_ACCOUNT_ID) } returns null
+        assertThrows<IllegalArgumentException> {
+            sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 23.00)
+        }
+
+        every { accounts.findById(DEST_ACCOUNT_ID) } returns null
+        assertThrows<IllegalArgumentException> {
+            sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 40.00)
+        }
+
+    }
+
     private fun newBankAccountId(accountId: String): BankAccount {
         return BankAccount(
             accountId,
