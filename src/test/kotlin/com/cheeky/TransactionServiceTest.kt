@@ -1,12 +1,11 @@
 package com.cheeky
 
 import com.cheeky.core.*
+import io.mockk.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.ArgumentCaptor
-import org.mockito.Mockito.*
-import java.lang.IllegalArgumentException
 import java.util.*
 
 internal class TransactionServiceTest {
@@ -18,18 +17,15 @@ internal class TransactionServiceTest {
         const val BALANCE = 120.0
     }
 
-    private var transactions: TransactionRepository = mock(TransactionRepository::class.java)
-    private var accounts: BankAccountRepository = mock(BankAccountRepository::class.java)
-
-    private val transactionCaptor = ArgumentCaptor.forClass<Transaction, Transaction>(Transaction::class.java)
-    private val bankAccountCaptor = ArgumentCaptor.forClass<BankAccount, BankAccount>(BankAccount::class.java)
+    private var transactions = mockk<TransactionRepository>(relaxed = true)
+    private var accounts = mockk<BankAccountRepository>(relaxed = true)
 
     private val sut = TransactionService(transactions, accounts)
 
     @BeforeEach
     internal fun setUp() {
-        `when`(accounts.findById(SOURCE_ACCOUNT_ID)).thenReturn(newBankAccountId(SOURCE_ACCOUNT_ID))
-        `when`(accounts.findById(DEST_ACCOUNT_ID)).thenReturn(newBankAccountId(DEST_ACCOUNT_ID))
+        every { accounts.findById(SOURCE_ACCOUNT_ID) } returns newBankAccountId(SOURCE_ACCOUNT_ID)
+        every { accounts.findById(DEST_ACCOUNT_ID) } returns newBankAccountId(SOURCE_ACCOUNT_ID)
     }
 
     @Test
@@ -37,6 +33,8 @@ internal class TransactionServiceTest {
         assertThrows<IllegalArgumentException> {
             sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
         }
+
+        verify(exactly = 0) { transactions.save(any(), any()) }
     }
 
     @Test
@@ -44,15 +42,22 @@ internal class TransactionServiceTest {
         val amount = 21.00
         sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
 
-        verify(transactions, times(2)).save(any(), transactionCaptor.capture())
-        verify(accounts, times(2)).save(any(), bankAccountCaptor.capture())
+        val savedTransactions = slot<Transaction>()
+        verify(exactly = 2) {
+            transactions.save(any(), capture(savedTransactions))
+        }
 
-        assert(transactionCaptor.value.amount.equals(amount))
-        assert(transactionCaptor.value.amount.equals(amount))
-        val sourceBalance = bankAccountCaptor.value.getBalance()
-        assert(sourceBalance.equals(sourceBalance - amount))
-        val destBalance = bankAccountCaptor.value.getBalance()
-        assert(destBalance.equals(destBalance + amount))
+        val sourceAccount = slot<BankAccount>()
+        val destAccount = slot<BankAccount>()
+        verifyOrder {
+            accounts.save(SOURCE_ACCOUNT_ID, capture(sourceAccount))
+            accounts.save(DEST_ACCOUNT_ID, capture(destAccount))
+        }
+        assertEquals(amount, savedTransactions.captured.amount)
+        assertEquals("Completed", savedTransactions.captured.status)
+
+        assertEquals(BALANCE - amount, sourceAccount.captured.getBalance())
+        assertEquals(BALANCE + amount, destAccount.captured.getBalance())
     }
 
     private fun newBankAccountId(accountId: String): BankAccount {

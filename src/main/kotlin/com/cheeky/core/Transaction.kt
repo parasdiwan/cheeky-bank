@@ -11,7 +11,9 @@ class Transaction (
     internal val userId: String,
     internal val amount: Double
 ) {
-    private var status: String = "Initiated"
+    var status: String = "Initiated"
+        private set
+
     private lateinit var completionTime: Date
 
     fun completed() {
