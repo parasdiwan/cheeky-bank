@@ -4,5 +4,5 @@ import com.cheeky.CheekyMemoryRepository
 import com.cheeky.di.CheekyUnit
 
 @CheekyUnit
-class BankAccountRepository: CheekyMemoryRepository<String, BankAccount>() {
+open class BankAccountRepository: CheekyMemoryRepository<String, BankAccount>() {
 }
