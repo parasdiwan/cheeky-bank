@@ -1,13 +1,17 @@
 package com.cheeky.core
 
+import com.cheeky.di.CheekyUnit
+import com.cheeky.di.Inject
 import java.lang.IllegalArgumentException
 import java.util.UUID
 import java.util.Date
 
-class TransactionService private constructor() {
+@CheekyUnit
+class TransactionService public @Inject constructor(
+    private var transactions: TransactionRepository,
+    private var accounts: BankAccountRepository
+) {
 
-    private val transactions: TransactionRepository = TransactionRepository.getInstance()
-    private val accounts: BankAccountRepository = BankAccountRepository.getInstance()
 
     fun transferMoney(userId: String, sourceAccountId: String, destinationAccountId: String, amount: Double) {
 
