@@ -31,7 +31,8 @@ class TransactionService public @Inject constructor(
             creationTime,
             sourceAccountId,
             destinationAccountId,
-            userId
+            userId,
+            amount
         )
 
         transactions.save(transactionId, transaction)

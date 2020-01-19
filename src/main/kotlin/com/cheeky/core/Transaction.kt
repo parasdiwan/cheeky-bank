@@ -3,12 +3,13 @@ package com.cheeky.core
 import java.util.Date
 
 class Transaction (
-    private val id: String,
-    private val creationTime: Date,
-    private var updateTime: Date,
-    private val sourceAccountId: String,
-    private val destinationAccountId: String,
-    private val userId: String
+    internal val id: String,
+    internal val creationTime: Date,
+    internal var updateTime: Date,
+    internal val sourceAccountId: String,
+    internal val destinationAccountId: String,
+    internal val userId: String,
+    internal val amount: Double
 ) {
     private var status: String = "Initiated"
     private lateinit var completionTime: Date

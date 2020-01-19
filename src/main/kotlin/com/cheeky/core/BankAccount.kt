@@ -3,12 +3,12 @@ package com.cheeky.core
 import java.util.Date
 
 class BankAccount (
-    val id: String,
-    val creationTime: Date,
-    var updateTime: Date,
-    val userId: String,
-    var balance: Double,
-    val currency: String
+    internal val id: String,
+    internal val creationTime: Date,
+    internal var updateTime: Date,
+    internal val userId: String,
+    internal var balance: Double,
+    internal val currency: String
 ){
     fun isAmountDeductible(amount: Double): Boolean {
         return balance >= amount
