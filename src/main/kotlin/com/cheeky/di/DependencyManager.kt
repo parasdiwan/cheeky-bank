@@ -20,6 +20,10 @@ class DependencyManager(
         println(dependenciesByClass)
     }
 
+    fun addUnit(unit: Any) {
+        dependenciesByClass[unit::class.java] = unit
+    }
+
     private fun createDependency(type: Class<*>): Any {
         if (dependenciesByClass.containsKey(type)) return dependenciesByClass[type]!!
 

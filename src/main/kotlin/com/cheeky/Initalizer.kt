@@ -5,12 +5,11 @@ import io.javalin.Javalin
 
 fun main() {
 
-    DependencyManager("com.cheeky.core").initialize()
     val app = Javalin
         .create()
         .start(8000)
 
-    app.get("/ping")
-        { handler -> handler.result("pong") }
-
+    val dependencyManager = DependencyManager("com.cheeky.core")
+    dependencyManager.initialize()
+    dependencyManager.addUnit(app)
 }
