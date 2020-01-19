@@ -22,10 +22,13 @@ class DependencyManager(
 
     private fun createDependency(type: Class<*>): Any {
         if (dependenciesByClass.containsKey(type)) return dependenciesByClass[type]!!
+
         val constructor = resolveConstructor(type)
+
         return if (constructor.parameterCount == 0) {
             constructor.newInstance()
-        } else {
+        }
+        else {
             val parameterTypes = constructor.parameterTypes
             val initializedParams = arrayOfNulls<Any>(constructor.parameterCount)
             for (index in 0 until constructor.parameterCount) {
