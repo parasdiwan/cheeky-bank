@@ -7,7 +7,7 @@ class BankAccount (
     internal val creationTime: Date,
     internal var updateTime: Date,
     internal val userId: String,
-    internal var balance: Double,
+    private var balance: Double,
     internal val currency: String
 ){
     fun isAmountDeductible(amount: Double): Boolean {
