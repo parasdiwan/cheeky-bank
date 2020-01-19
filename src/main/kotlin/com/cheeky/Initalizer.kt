@@ -10,6 +10,6 @@ fun main() {
         .start(8000)
 
     val dependencyManager = DependencyManager("com.cheeky.core")
-    dependencyManager.initialize()
     dependencyManager.addUnit(app)
+    dependencyManager.initialize()
 }
