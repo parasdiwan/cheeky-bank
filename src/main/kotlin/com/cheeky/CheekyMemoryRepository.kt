@@ -9,7 +9,7 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> {
 
     private val dataStore = ConcurrentHashMap<String, T>();
 
-    fun save(entity: T) {
+    fun save(entity: T): String {
         val key = entity.id
         if (key == null) {
             entity.id = UUID.randomUUID().toString()
@@ -17,6 +17,7 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> {
         validateVersioning(key, entity.versionNumber)
         entity.updateTime = Date()
         dataStore[key] = entity
+        return entity.id
     }
 
     private fun validateVersioning(key: String, versionNumber: String) {
