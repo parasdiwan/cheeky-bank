@@ -19,7 +19,7 @@ internal class TransactionServiceTest {
     private var transactions = mockk<TransactionRepository>(relaxed = true)
     private var accounts = mockk<BankAccountRepository>(relaxed = true)
 
-    private val sut = TransactionService(transactions, accounts)
+    private val sut = TransactionService(transactions, accounts, CheekyLocks())
 
     @BeforeEach
     internal fun setUp() {
