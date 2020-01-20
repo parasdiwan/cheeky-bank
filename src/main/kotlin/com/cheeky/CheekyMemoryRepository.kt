@@ -10,4 +10,8 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> () {
     fun findById(id: String): T? {
         return dataStore[id]
     }
+
+    fun save(entity: T) {
+        dataStore.put(entity.id, entity)
+    }
 }

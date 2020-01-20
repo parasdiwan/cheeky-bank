@@ -32,11 +32,7 @@ class TransactionService public @Inject constructor(
         sourceAccount.deductAmount(amount)
         destinationAccount.addAmount(amount)
 
-        accounts.save(sourceAccount)
-        accounts.save(destinationAccount)
-
         transaction.completed()
-        transactions.save(transaction)
     }
 
     private fun validateUserTransaction(sourceAccount: BankAccount, userId: String, amount: Double) {
