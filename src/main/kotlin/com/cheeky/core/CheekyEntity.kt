@@ -8,5 +8,5 @@ abstract class CheekyEntity (
     internal var updateTime: Date = Date()
     internal var versionNumber: String = UUID.randomUUID().toString()
 
-    abstract fun copy(): CheekyEntity
+    abstract fun copy(updateTime: Date = Date(), versionNumber: String = UUID.randomUUID().toString()): CheekyEntity
 }
