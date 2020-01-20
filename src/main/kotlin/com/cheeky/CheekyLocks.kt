@@ -7,7 +7,7 @@ class CheekyLocks(
     private val use: Boolean
 ) {
 
-    private var locks: Striped<Lock> = Striped.lock(0)
+    private var locks: Striped<Lock> = Striped.lock(1)
 
     fun lock(key: String) {
         if (!use) {
