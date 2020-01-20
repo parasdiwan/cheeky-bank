@@ -10,11 +10,21 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> {
     private val dataStore = ConcurrentHashMap<String, T>();
 
     fun save(entity: T) {
-        if (entity.id == null) {
+        val key = entity.id
+        if (key == null) {
             entity.id = UUID.randomUUID().toString()
         }
+        validateVersioning(key, entity.versionNumber)
         entity.updateTime = Date()
-        dataStore[entity.id] = entity
+        dataStore[key] = entity
+    }
+
+    private fun validateVersioning(key: String, versionNumber: String) {
+        if (dataStore.containsKey(key)
+            && dataStore.get(key)!!.versionNumber != versionNumber
+        ) {
+            throw RuntimeException("Entity update failed: Version mismatch")
+        }
     }
 
     fun findById(id: String): T? {
