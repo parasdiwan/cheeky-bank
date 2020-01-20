@@ -1,6 +1,7 @@
 package com.cheeky
 
 import com.cheeky.core.CheekyEntity
+import java.util.Date
 import java.util.UUID
 
 abstract class CheekyMemoryRepository<T: CheekyEntity> {
@@ -11,6 +12,7 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> {
         if (entity.id == null) {
             entity.id = UUID.randomUUID().toString()
         }
+        entity.updateTime = Date()
         dataStore.put(entity.id, entity)
     }
 
