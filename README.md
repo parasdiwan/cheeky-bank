@@ -6,7 +6,7 @@ To run the app, follow these steps:
 - Run command `./run-app`
 - If that doesn't work, run using gradle task `run` | `./gradlew clean run`
 
-Two endpoints:
+###Two endpoints:
 - Ping endpoint
 ```$xslt
 curl --location --request GET 'localhost:8000/ping'
