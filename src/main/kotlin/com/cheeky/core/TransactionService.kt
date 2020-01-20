@@ -23,12 +23,9 @@ class TransactionService public @Inject constructor(
         validateUserTransaction(sourceAccount, userId, amount)
 
         val transactionId = UUID.randomUUID().toString()
-        val creationTime = Date()
 
         val transaction = Transaction(
             transactionId,
-            creationTime,
-            creationTime,
             sourceAccountId,
             destinationAccountId,
             userId,
