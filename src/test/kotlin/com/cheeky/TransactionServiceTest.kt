@@ -24,7 +24,7 @@ internal class TransactionServiceTest {
     @BeforeEach
     internal fun setUp() {
         every { accounts.findById(SOURCE_ACCOUNT_ID) } returns newBankAccountId(SOURCE_ACCOUNT_ID)
-        every { accounts.findById(DEST_ACCOUNT_ID) } returns newBankAccountId(SOURCE_ACCOUNT_ID)
+        every { accounts.findById(DEST_ACCOUNT_ID) } returns newBankAccountId(DEST_ACCOUNT_ID)
     }
 
     @Test
@@ -33,7 +33,7 @@ internal class TransactionServiceTest {
             sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
         }
 
-        verify(exactly = 0) { transactions.save(any(), any()) }
+        verify(exactly = 0) { transactions.save(any()) }
     }
 
     @Test
@@ -43,19 +43,21 @@ internal class TransactionServiceTest {
 
         val savedTransactions = slot<Transaction>()
         verify(exactly = 2) {
-            transactions.save(any(), capture(savedTransactions))
+            transactions.save(capture(savedTransactions))
         }
 
         val sourceAccount = slot<BankAccount>()
         val destAccount = slot<BankAccount>()
         verifyOrder {
-            accounts.save(SOURCE_ACCOUNT_ID, capture(sourceAccount))
-            accounts.save(DEST_ACCOUNT_ID, capture(destAccount))
+            accounts.save(capture(sourceAccount))
+            accounts.save(capture(destAccount))
         }
         assertEquals(amount, savedTransactions.captured.amount)
         assertEquals("Completed", savedTransactions.captured.status)
 
+        assertEquals(SOURCE_ACCOUNT_ID, sourceAccount.captured.id)
         assertEquals(BALANCE - amount, sourceAccount.captured.getBalance())
+        assertEquals(DEST_ACCOUNT_ID, destAccount.captured.id)
         assertEquals(BALANCE + amount, destAccount.captured.getBalance())
     }
 
@@ -75,11 +77,12 @@ internal class TransactionServiceTest {
 
     private fun newBankAccountId(accountId: String): BankAccount {
         val bankAccount = BankAccount(
-            accountId,
             USER_ID,
             "EUR"
         )
+        bankAccount.id = accountId
         bankAccount.addAmount(BALANCE)
+
         return bankAccount
     }
 }

@@ -1,9 +1,6 @@
 package com.cheeky.core
 
-import java.util.Date
-
 class BankAccount (
-    id: String,
     internal val userId: String,
     internal val currency: String
 ): CheekyEntity() {
