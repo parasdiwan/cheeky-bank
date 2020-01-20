@@ -1,3 +1,5 @@
+@file:JvmName("Initializer")
+
 package com.cheeky
 
 import com.cheeky.di.DependencyManager
