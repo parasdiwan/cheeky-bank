@@ -4,8 +4,7 @@ import com.cheeky.CheekyLocks
 import com.cheeky.di.CheekyUnit
 import com.cheeky.di.Inject
 import java.lang.IllegalArgumentException
-import java.util.UUID
-import java.util.Date
+import java.util.*
 
 @CheekyUnit
 class TransactionService public @Inject constructor(
@@ -31,6 +30,8 @@ class TransactionService public @Inject constructor(
             amount
         )
 
+        val transactionKey: String = prepareKey(sourceAccountId, destinationAccountId)
+        locks.lock(transactionKey)
         sourceAccount.deductAmount(amount)
         destinationAccount.addAmount(amount)
 
@@ -38,7 +39,12 @@ class TransactionService public @Inject constructor(
         accounts.save(destinationAccount)
 
         transaction.completed()
+        locks.unlock(transactionKey)
         transactions.save(transaction)
+    }
+
+    private fun prepareKey(sourceAccountId: String, destinationAccountId: String): String {
+        return Objects.hash(sourceAccountId, destinationAccountId).toString()
     }
 
     private fun validateUserTransaction(sourceAccount: BankAccount, userId: String, amount: Double) {
