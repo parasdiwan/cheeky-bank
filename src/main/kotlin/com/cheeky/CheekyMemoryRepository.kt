@@ -12,9 +12,8 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> {
     fun save(entity: T): String {
         val key = entity.id
         validateVersioning(key, entity.versionNumber)
-        entity.updateTime = Date()
-        entity.versionNumber = UUID.randomUUID().toString()
-        dataStore[key] = entity
+        val entityToSave = entity.copy(Date(), UUID.randomUUID().toString()) as T
+        dataStore[key] = entityToSave
         return entity.id
     }
 
