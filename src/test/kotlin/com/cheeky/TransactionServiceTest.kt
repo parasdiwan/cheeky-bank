@@ -52,7 +52,6 @@ internal class TransactionServiceTest {
         }
 
         assertEquals(amount, savedTransactions.captured.amount)
-        assertEquals("Completed", savedTransactions.captured.status)
 
         assertEquals(BALANCE - amount, sourceAccount.getBalance())
         assertEquals(BALANCE + amount, destAccount.getBalance())

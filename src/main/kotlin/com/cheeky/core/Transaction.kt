@@ -8,13 +8,4 @@ class Transaction (
     internal val userId: String,
     internal val amount: Double
 ): CheekyEntity() {
-    var status: String = "Initiated"
-        private set
-
-    private lateinit var completionTime: Date
-
-    fun completed() {
-        status = "Completed"
-        completionTime = Date()
-    }
 }

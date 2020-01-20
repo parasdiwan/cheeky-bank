@@ -1,13 +1,14 @@
 package com.cheeky.core
 
-import java.util.concurrent.atomic.AtomicReference
+import com.google.common.util.concurrent.AtomicDouble
+import java.util.function.BinaryOperator
 
 class BankAccount (
     internal val userId: String,
     internal val currency: String
 ): CheekyEntity() {
 
-    private var balance: AtomicReference<Double> = AtomicReference(0.0)
+    private var balance: AtomicDouble = AtomicDouble(0.0)
 
     fun isAmountDeductible(amount: Double): Boolean {
         return balance.get() >= amount
@@ -25,7 +26,7 @@ class BankAccount (
     fun transferAmount(amount: Double, destinationAccount: BankAccount) {
         val fetchedBalance = getBalance()
         if (fetchedBalance >= amount) {
-            balance.compareAndSet(fetchedBalance, fetchedBalance - amount)
+            val isSuccess = balance.compareAndSet(fetchedBalance, fetchedBalance - amount)
             destinationAccount.addAmount(amount)
         }
     }
