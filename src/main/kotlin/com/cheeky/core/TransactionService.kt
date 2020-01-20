@@ -14,19 +14,19 @@ class TransactionService public @Inject constructor(
 ) {
 
 
-    fun transferMoney(userId: String, sourceAccountId: String, destinationAccountId: String, amount: Double) {
+    fun transferMoney(token: String, sourceAccountId: String, destinationAccountId: String, amount: Double) {
 
         val sourceAccount: BankAccount = accounts.findById(sourceAccountId)
             ?: throw IllegalArgumentException("Account not found")
         val destinationAccount: BankAccount = accounts.findById(destinationAccountId)
             ?: throw IllegalArgumentException("Destination account not found")
 
-        validateUserTransaction(sourceAccount, userId, amount)
+        validateUserTransaction(sourceAccount, token, amount)
 
         val transaction = Transaction(
             sourceAccountId,
             destinationAccountId,
-            userId,
+            token,
             amount
         )
 
@@ -48,7 +48,7 @@ class TransactionService public @Inject constructor(
     }
 
     private fun validateUserTransaction(sourceAccount: BankAccount, userId: String, amount: Double) {
-        if (userId != sourceAccount.userId) {
+        if (userId != sourceAccount.token) {
             throw IllegalArgumentException("User not authorized to perform transfer")
         }
         if (!sourceAccount.isAmountDeductible(amount)) {

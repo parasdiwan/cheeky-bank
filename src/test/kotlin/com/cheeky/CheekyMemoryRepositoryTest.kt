@@ -26,7 +26,7 @@ internal class CheekyMemoryRepositoryTest {
 
         val savedAccount = sut.findById(accountId)
 
-        assertEquals(account.userId, savedAccount?.userId)
+        assertEquals(account.token, savedAccount?.token)
         assertEquals(account.id, savedAccount?.id)
     }
 

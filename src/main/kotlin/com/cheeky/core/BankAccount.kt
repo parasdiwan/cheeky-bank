@@ -3,7 +3,7 @@ package com.cheeky.core
 import java.util.*
 
 class BankAccount (
-    internal val userId: String,
+    internal val token: String,
     internal val currency: String
 ): CheekyEntity() {
 
@@ -26,7 +26,7 @@ class BankAccount (
     }
 
     override fun copy(updateTime: Date, versionNumber: String): CheekyEntity {
-        val bankAccount = BankAccount(userId, currency)
+        val bankAccount = BankAccount(token, currency)
         bankAccount.balance = balance
         bankAccount.id = id
         bankAccount.versionNumber = versionNumber

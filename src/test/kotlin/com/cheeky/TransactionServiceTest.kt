@@ -12,7 +12,7 @@ internal class TransactionServiceTest {
     companion object {
         const val SOURCE_ACCOUNT_ID = "1FSD5HJ2L"
         const val DEST_ACCOUNT_ID = "508FAS32L"
-        const val USER_ID = "3429023"
+        const val TOKEN = "3429023"
         const val BALANCE = 120.0
     }
 
@@ -30,7 +30,7 @@ internal class TransactionServiceTest {
     @Test
     internal fun transferMoney_whenNotEnoughBalance_shouldThrowException() {
         assertThrows<IllegalArgumentException> {
-            sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
+            sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
         }
 
         verify(exactly = 0) { transactions.save(any()) }
@@ -39,7 +39,7 @@ internal class TransactionServiceTest {
     @Test
     internal fun transferMoney_whenEnoughBalance_shouldCompleteTransfer() {
         val amount = 21.00
-        sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
+        sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
 
         val savedTransactions = slot<Transaction>()
         verify(exactly = 1) {
@@ -65,19 +65,19 @@ internal class TransactionServiceTest {
     fun transferMoney_whenAccountsDontExist_shouldThrowException() {
         every { accounts.findById(SOURCE_ACCOUNT_ID) } returns null
         assertThrows<IllegalArgumentException> {
-            sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 23.00)
+            sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 23.00)
         }
 
         every { accounts.findById(DEST_ACCOUNT_ID) } returns null
         assertThrows<IllegalArgumentException> {
-            sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 40.00)
+            sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 40.00)
         }
 
     }
 
     private fun newBankAccountId(accountId: String): BankAccount {
         val bankAccount = BankAccount(
-            USER_ID,
+            TOKEN,
             "EUR"
         )
         bankAccount.id = accountId
