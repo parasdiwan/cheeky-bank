@@ -22,4 +22,13 @@ class BankAccount (
     internal fun getBalance(): Double {
         return balance
     }
+
+    override fun copy(): BankAccount {
+        val bankAccount = BankAccount(userId, currency)
+        bankAccount.balance = balance
+        bankAccount.id = id
+        bankAccount.versionNumber = versionNumber
+        bankAccount.updateTime = updateTime
+        return bankAccount
+    }
 }
