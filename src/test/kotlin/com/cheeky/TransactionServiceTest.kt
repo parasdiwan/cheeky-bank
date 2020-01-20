@@ -38,6 +38,11 @@ internal class TransactionServiceTest {
 
     @Test
     internal fun transferMoney_whenEnoughBalance_shouldCompleteTransfer() {
+        val sourceAccount = newBankAccountId(SOURCE_ACCOUNT_ID)
+        every { accounts.findById(SOURCE_ACCOUNT_ID) } returns sourceAccount
+        val destAccount = newBankAccountId(DEST_ACCOUNT_ID)
+        every { accounts.findById(DEST_ACCOUNT_ID) } returns destAccount
+
         val amount = 21.00
         sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
 
@@ -46,19 +51,11 @@ internal class TransactionServiceTest {
             transactions.save(capture(savedTransactions))
         }
 
-        val sourceAccount = slot<BankAccount>()
-        val destAccount = slot<BankAccount>()
-        verifyOrder {
-            accounts.save(capture(sourceAccount))
-            accounts.save(capture(destAccount))
-        }
         assertEquals(amount, savedTransactions.captured.amount)
         assertEquals("Completed", savedTransactions.captured.status)
 
-        assertEquals(SOURCE_ACCOUNT_ID, sourceAccount.captured.id)
-        assertEquals(BALANCE - amount, sourceAccount.captured.getBalance())
-        assertEquals(DEST_ACCOUNT_ID, destAccount.captured.id)
-        assertEquals(BALANCE + amount, destAccount.captured.getBalance())
+        assertEquals(BALANCE - amount, sourceAccount.getBalance())
+        assertEquals(BALANCE + amount, destAccount.getBalance())
     }
 
     @Test
