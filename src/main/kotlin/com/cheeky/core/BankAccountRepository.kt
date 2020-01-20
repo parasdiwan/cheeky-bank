@@ -6,6 +6,6 @@ import com.cheeky.di.CheekyUnit
 
 @CheekyUnit
 open class BankAccountRepository:
-    CheekyMemoryRepository<BankAccount>(CheekyLocks())
+    CheekyMemoryRepository<BankAccount>()
 {
 }

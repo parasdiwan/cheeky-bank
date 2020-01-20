@@ -1,5 +1,6 @@
 package com.cheeky.core
 
+import com.cheeky.CheekyLocks
 import com.cheeky.di.CheekyUnit
 import com.cheeky.di.Inject
 import java.lang.IllegalArgumentException
@@ -9,7 +10,8 @@ import java.util.Date
 @CheekyUnit
 class TransactionService public @Inject constructor(
     private var transactions: TransactionRepository,
-    private var accounts: BankAccountRepository
+    private var accounts: BankAccountRepository,
+    private val locks : CheekyLocks
 ) {
 
 
