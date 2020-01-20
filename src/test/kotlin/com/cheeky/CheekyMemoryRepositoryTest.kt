@@ -48,5 +48,5 @@ internal class CheekyMemoryRepositoryTest {
     }
 }
 
-class Sut: CheekyMemoryRepository<BankAccount>(CheekyLocks(false)) {
+class Sut: CheekyMemoryRepository<BankAccount>() {
 }
