@@ -1,5 +1,7 @@
 package com.cheeky.core
 
+import com.google.common.util.concurrent.AtomicDouble
+import java.lang.IllegalArgumentException
 import java.util.*
 
 class BankAccount (
@@ -7,22 +9,27 @@ class BankAccount (
     internal val currency: String
 ): CheekyEntity() {
 
-    private var balance: Double = 0.0
+    private var balance: AtomicDouble = AtomicDouble(0.0)
 
     fun isAmountDeductible(amount: Double): Boolean {
-        return balance >= amount
+        return balance.get() >= amount
     }
 
     fun deductAmount(amount: Double) {
-        balance = balance - amount
+        val fetchedBalance = balance.get()
+        if (amount > fetchedBalance) {
+            throw IllegalArgumentException("Amount cannot be more than the balance.")
+        }
+        balance.compareAndSet(fetchedBalance, fetchedBalance - amount)
     }
 
     fun addAmount(amount: Double) {
-        balance = balance + amount
+        val fetchedBalance = balance.get()
+        balance.compareAndSet(fetchedBalance, fetchedBalance + amount)
     }
 
     internal fun getBalance(): Double {
-        return balance
+        return balance.get()
     }
 
     override fun copy(updateTime: Date, versionNumber: String): CheekyEntity {
