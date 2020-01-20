@@ -6,7 +6,7 @@ class BankAccount (
     id: String,
     internal val userId: String,
     internal val currency: String
-): CheekyEntity(id, Date(), Date()) {
+): CheekyEntity() {
 
     private var balance: Double = 0.0
 

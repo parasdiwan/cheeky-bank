@@ -22,26 +22,23 @@ class TransactionService public @Inject constructor(
 
         validateUserTransaction(sourceAccount, userId, amount)
 
-        val transactionId = UUID.randomUUID().toString()
-
         val transaction = Transaction(
-            transactionId,
             sourceAccountId,
             destinationAccountId,
             userId,
             amount
         )
 
-        transactions.save(transactionId, transaction)
+        transactions.save(transaction)
 
         sourceAccount.deductAmount(amount)
         destinationAccount.addAmount(amount)
 
-        accounts.save(sourceAccountId, sourceAccount)
-        accounts.save(destinationAccountId, destinationAccount)
+        accounts.save(sourceAccount)
+        accounts.save(destinationAccount)
 
         transaction.completed()
-        transactions.save(transactionId, transaction)
+        transactions.save(transaction)
     }
 
     private fun validateUserTransaction(sourceAccount: BankAccount, userId: String, amount: Double) {

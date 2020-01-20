@@ -3,12 +3,11 @@ package com.cheeky.core
 import java.util.Date
 
 class Transaction (
-    id: String,
     internal val sourceAccountId: String,
     internal val destinationAccountId: String,
     internal val userId: String,
     internal val amount: Double
-): CheekyEntity(id, Date(), Date()) {
+): CheekyEntity() {
     var status: String = "Initiated"
         private set
 

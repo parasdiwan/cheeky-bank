@@ -1,17 +1,20 @@
 package com.cheeky
 
-abstract class CheekyMemoryRepository<ID, T> {
+import com.cheeky.core.CheekyEntity
+import java.util.UUID
 
-    protected val dataStore = hashMapOf<ID, T>();
+abstract class CheekyMemoryRepository<T: CheekyEntity> {
 
-    fun save(id: ID, entity: T?) {
-        if (entity == null) {
-            return
+    private val dataStore = hashMapOf<String, T>();
+
+    fun save(entity: T) {
+        if (entity.id == null) {
+            entity.id = UUID.randomUUID().toString()
         }
-        dataStore.put(id, entity)
+        dataStore.put(entity.id, entity)
     }
 
-    fun findById(id: ID): T? {
+    fun findById(id: String): T? {
         return dataStore.get(id)
     }
 }
