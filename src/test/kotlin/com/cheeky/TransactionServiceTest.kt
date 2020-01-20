@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.*
 
 internal class TransactionServiceTest {
 
@@ -75,13 +74,12 @@ internal class TransactionServiceTest {
     }
 
     private fun newBankAccountId(accountId: String): BankAccount {
-        return BankAccount(
+        val bankAccount = BankAccount(
             accountId,
-            Date(),
-            Date(),
             USER_ID,
-            BALANCE,
             "EUR"
         )
+        bankAccount.addAmount(BALANCE)
+        return bankAccount
     }
 }
