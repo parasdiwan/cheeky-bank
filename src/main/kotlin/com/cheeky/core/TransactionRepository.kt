@@ -5,5 +5,5 @@ import com.cheeky.CheekyMemoryRepository
 import com.cheeky.di.CheekyUnit
 
 @CheekyUnit
-open class TransactionRepository: CheekyMemoryRepository<Transaction>(CheekyLocks(false)) {
+open class TransactionRepository: CheekyMemoryRepository<Transaction>(CheekyLocks()) {
 }
