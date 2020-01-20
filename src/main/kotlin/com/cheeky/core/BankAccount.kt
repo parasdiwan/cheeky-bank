@@ -13,7 +13,7 @@ class BankAccount (
         return balance.get() >= amount
     }
 
-    private fun addAmount(amount: Double) {
+    fun addAmount(amount: Double) {
         val fetchedBalance = getBalance()
         balance.compareAndSet(fetchedBalance, fetchedBalance + amount)
     }

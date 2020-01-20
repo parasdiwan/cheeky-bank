@@ -17,7 +17,6 @@ class DependencyManager(
         for (type in types) {
             dependenciesByClass[type] = createDependency(type)
         }
-        println(dependenciesByClass)
     }
 
     fun addUnit(unit: Any) {
