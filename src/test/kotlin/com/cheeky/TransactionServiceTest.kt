@@ -37,6 +37,15 @@ internal class TransactionServiceTest {
     }
 
     @Test
+    internal fun transferMoney_whenWrongToken_shouldThrowException() {
+        assertThrows<IllegalArgumentException> {
+            sut.transferMoney("wrong_token", SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 355.00)
+        }
+
+        verify(exactly = 0) { transactions.save(any()) }
+    }
+
+    @Test
     internal fun transferMoney_whenEnoughBalance_shouldCompleteTransfer() {
         val amount = 21.00
         sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
@@ -72,7 +81,6 @@ internal class TransactionServiceTest {
         assertThrows<IllegalArgumentException> {
             sut.transferMoney(TOKEN, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, 40.00)
         }
-
     }
 
     private fun newBankAccountId(accountId: String): BankAccount {
