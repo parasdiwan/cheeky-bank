@@ -23,7 +23,6 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> (
         return entity.id
     }
 
-    @Synchronized
     private fun validateVersioning(key: String, entityVersionNumber: String) {
         if (dataStore.containsKey(key)
             && dataStore[key]!!.versionNumber != entityVersionNumber
@@ -35,4 +34,6 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> (
     fun findById(id: String): T? {
         return dataStore[id]?.copy() as T?
     }
+
+
 }

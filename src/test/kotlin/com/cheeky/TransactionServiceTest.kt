@@ -75,6 +75,8 @@ internal class TransactionServiceTest {
 
     }
 
+    // TODO add test with loads of threads using the service
+
     private fun newBankAccountId(accountId: String): BankAccount {
         val bankAccount = BankAccount(
             USER_ID,
