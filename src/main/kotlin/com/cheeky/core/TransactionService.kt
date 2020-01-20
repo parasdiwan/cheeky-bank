@@ -29,8 +29,6 @@ class TransactionService public @Inject constructor(
             amount
         )
 
-        transactions.save(transaction)
-
         sourceAccount.deductAmount(amount)
         destinationAccount.addAmount(amount)
 

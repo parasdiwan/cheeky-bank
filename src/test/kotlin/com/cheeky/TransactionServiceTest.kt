@@ -42,7 +42,7 @@ internal class TransactionServiceTest {
         sut.transferMoney(USER_ID, SOURCE_ACCOUNT_ID, DEST_ACCOUNT_ID, amount)
 
         val savedTransactions = slot<Transaction>()
-        verify(exactly = 2) {
+        verify(exactly = 1) {
             transactions.save(capture(savedTransactions))
         }
 
