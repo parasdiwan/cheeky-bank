@@ -1,25 +1,32 @@
 package com.cheeky.core
 
+import java.util.concurrent.atomic.AtomicReference
+
 class BankAccount (
     internal val userId: String,
     internal val currency: String
 ): CheekyEntity() {
 
-    private var balance: Double = 0.0
+    private var balance: AtomicReference<Double> = AtomicReference(0.0)
 
     fun isAmountDeductible(amount: Double): Boolean {
-        return balance >= amount
+        return balance.get() >= amount
     }
 
-    fun deductAmount(amount: Double) {
-        balance = balance - amount
-    }
-
-    fun addAmount(amount: Double) {
-        balance = balance + amount
+    private fun addAmount(amount: Double) {
+        val fetchedBalance = getBalance()
+        balance.compareAndSet(fetchedBalance, fetchedBalance + amount)
     }
 
     internal fun getBalance(): Double {
-        return balance
+        return balance.get()
+    }
+
+    fun transferAmount(amount: Double, destinationAccount: BankAccount) {
+        val fetchedBalance = getBalance()
+        if (fetchedBalance >= amount) {
+            balance.compareAndSet(fetchedBalance, fetchedBalance - amount)
+            destinationAccount.addAmount(amount)
+        }
     }
 }
