@@ -1,7 +1,5 @@
 package com.cheeky.core
 
-import java.util.*
-
 class BankAccount (
     internal val userId: String,
     internal val currency: String
@@ -23,14 +21,5 @@ class BankAccount (
 
     internal fun getBalance(): Double {
         return balance
-    }
-
-    override fun copy(updateTime: Date, versionNumber: String): CheekyEntity {
-        val bankAccount = BankAccount(userId, currency)
-        bankAccount.balance = balance
-        bankAccount.id = id
-        bankAccount.versionNumber = versionNumber
-        bankAccount.updateTime = updateTime
-        return bankAccount
     }
 }

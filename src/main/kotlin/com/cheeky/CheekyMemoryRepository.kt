@@ -14,4 +14,8 @@ abstract class CheekyMemoryRepository<T: CheekyEntity> () {
     fun save(entity: T) {
         dataStore.put(entity.id, entity)
     }
+
+    fun snapshot(key: String) {
+
+    }
 }

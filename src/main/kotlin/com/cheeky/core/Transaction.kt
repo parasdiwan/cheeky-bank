@@ -17,12 +17,4 @@ class Transaction (
         status = "Completed"
         completionTime = Date()
     }
-
-    override fun copy(updateTime: Date, versionNumber: String): CheekyEntity {
-        val transaction = Transaction(sourceAccountId, destinationAccountId, userId, amount)
-        transaction.id = id
-        transaction.versionNumber = versionNumber
-        transaction.updateTime = updateTime
-        return transaction
-    }
 }
